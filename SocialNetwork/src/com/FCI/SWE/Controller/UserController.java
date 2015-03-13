@@ -52,7 +52,7 @@ public class UserController {
 	@Path("/doSearch")
 	public Response usersList(@FormParam("uname") String uname){
 		System.out.println(uname);
-		String serviceUrl = "http://localhost:8888/rest/SearchService";
+		String serviceUrl = "http://social-media-project-sw2.appspot.com/rest/SearchService";
 		String urlParameters = "uname=" + uname;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
@@ -112,7 +112,7 @@ public class UserController {
 	public String response(@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
 
-		String serviceUrl = "http://localhost:8888/rest/RegistrationService";
+		String serviceUrl = "http://social-media-project-sw2.appspot.com/rest/RegistrationService";
 		String urlParameters = "uname=" + uname + "&email=" + email
 				+ "&password=" + pass;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
@@ -157,7 +157,7 @@ public class UserController {
 		String urlParameters = "uname=" + uname + "&password=" + pass;
 
 		String retJson = Connection.connect(
-				"http://localhost:8888/rest/LoginService", urlParameters,
+				"http://social-media-project-sw2.appspot.com/rest/LoginService", urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 
 		JSONParser parser = new JSONParser();
@@ -191,13 +191,22 @@ public class UserController {
 		return null;
 	}
 //-------------------------------------------------------------------------------------
+	/**
+	 * Action function to response to search request. This function will act as a
+	 * controller part, it will calls search service to check user data and make sure
+	 * user in datastore
+	 * 
+	 * @param uname
+	 *            provided user name
+	 * @return makesure page view
+	 */
 	@POST
 	@Path("/search")
 	@Produces("text/html")
 	public Response search(@FormParam("uname") String uname) {
 			String urlParameters = "uname=" + uname ;
 			String retJson = Connection.connect(
-					"http://localhost:8888/rest/searchService", urlParameters,
+					"http://social-media-project-sw2.appspot.com/rest/searchService", urlParameters,
 					"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 			JSONParser parser = new JSONParser();
 			Object obj;
@@ -219,11 +228,20 @@ public class UserController {
 			return null;
 	}
 //------------------------------------------------------------------------------------------
+	/**
+	 * Action function to response to add request. This function will act as a
+	 * controller part, it will calls add service to check user data and put
+	 * user into datastore
+	 * 
+	 * @param uname
+	 *            provided user name
+	 * @return String
+	 */
 	@POST
 	@Path("/add")
 	@Produces("text/html")
 	public String add(@FormParam("uname") String uname) {
-	String serviceUrl = "http://localhost:8888/rest/AddService";
+	String serviceUrl = "http://social-media-project-sw2.appspot.com/rest/AddService";
 	String urlParameter = "Sender=" + CurrentUser.user1.getName() + "&Reciever=" + uname +"&Status= unaccepted";
 	String retJson2 = Connection.connect(serviceUrl, urlParameter, "POST",
 			"application/x-www-form-urlencoded;charset=UTF-8");
@@ -246,6 +264,12 @@ public class UserController {
 		return null;
 	}
 //------------------------------------------------------------------------------------------
+	/**
+	 * Action function to response to logout request. This function will act as a
+	 * controller part,  data and remove the current user to give the ability another
+	 * one to login
+	 * @return entryPoint page view
+	 */
 	@POST
 	@Path("/logout")
 	public Response logout() {
@@ -265,6 +289,15 @@ public class UserController {
 		return new UserEntity(null, null, null).getFriendsToShow();
 	}*/
 //---------------------------------------------------------------------------------------------
+	/**
+	 * Action function to response to accept request. This function will act as a
+	 * controller part, it will calls accept service to put the user request 
+	 * into friends table in datastore
+	 * 
+	 * @param uname
+	 *            provided user name
+	 * @return String
+	 */
 	@POST
 	@Path("/accept")
 	@Produces("text/html")
@@ -273,7 +306,7 @@ public class UserController {
 		String urlParameters = "Sender=" + uname+ "&Reciever=" + CurrentUser.user1.getName() ;
 
 		String retJson = Connection.connect(
-				"http://localhost:8888/rest/acceptService", urlParameters,
+				"http://social-media-project-sw2.appspot.com/rest/acceptService", urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 
 		JSONParser parser = new JSONParser();
@@ -281,8 +314,10 @@ public class UserController {
 		try {
 			obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
-			if (object.get("Status").equals("OK"))
+			if (object.get("Status").equals("OK")){
+			   System.out.println("2");
 			   return "accepted Successfully";
+			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

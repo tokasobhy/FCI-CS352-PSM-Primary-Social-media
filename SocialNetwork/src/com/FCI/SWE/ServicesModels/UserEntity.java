@@ -104,6 +104,15 @@ public class UserEntity {
 		return null;
 	}
 //------------------------------------------------------------------------------------
+	/**
+	 * 
+	 * This static method will form UserEntity class using user name and
+	 * password This method will serach for user in datastore
+	 * 
+	 * @param name
+	 *            user name
+	 * @return Constructed user entity
+	 */
 	public static UserEntity getUser(String name) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -155,6 +164,11 @@ public class UserEntity {
 
 	}
 //---------------------------------------------------------
+	/**
+	 * This method will be used to save user object in datastore
+	 * 
+	 * @return boolean if user is saved correctly or not
+	 */
 	public Boolean saveRequest() {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -203,9 +217,22 @@ public class UserEntity {
 		return null;
 	}*/
 //---------------------------------------------------------------------------------------------------------
+	/**
+	 * 
+	 * This static method will form UserEntity class using user name and
+	 * the name of the user who want to accept 
+	 * This method will search for friend in datastore
+	 * 
+	 * @param name
+	 *            user sender
+	  * @param Reciever
+	 *            user Reciever    
+	 * @return boolean if user is Accepted correctly or not
+	 */
 	public static boolean getAndAcceptFriend(String name,  String Reciever) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
+		boolean result = false ;
 		Query gaeQuery = new Query("Friends");
 		Transaction txn = datastore.beginTransaction();
 		PreparedQuery pq = datastore.prepare(gaeQuery);
@@ -225,17 +252,19 @@ public class UserEntity {
 					
 					datastore.put(employee);
 					txn.commit();
+					result = true;
 					}finally{
 						if (txn.isActive()) {
 					        txn.rollback();
+					        result = true;
 					    }
 					}
-					return true;
+				result = true;
 			}
 		}
 
 		
-	return false;
+	return result;
 	}
 
 }

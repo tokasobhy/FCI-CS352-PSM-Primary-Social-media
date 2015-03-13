@@ -141,6 +141,7 @@ public class UserServices {
 		boolean user = UserEntity.getAndAcceptFriend(uname,Reciever);
 		if (user == true) {
 			object.put("Status", "OK");
+			System.out.println("1");
 		} else {
 			object.put("Status", "Failed");
 				}
