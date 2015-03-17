@@ -9,6 +9,11 @@
   <input type="submit" value="Logout">
   </form><br>
   
+  <form action="/social/normalSearch"  method="post">
+  Enter the name you want to Search:<input type="text" name="u_name" />
+  <input type="submit" value="Search">
+  </form><br>
+  
   <form action="/social/accept"  method="post">
   Enter the friend name to be accepted:<input type="text" name="u_name" />
   <input type="submit" value="accept">

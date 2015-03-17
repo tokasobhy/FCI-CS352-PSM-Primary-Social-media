@@ -79,6 +79,13 @@ public class UserServices {
 		return object.toString();
 	}
 //----------------------------------------
+	/**
+	 * Add Rest Service, this service will be called to make add request process
+	 * also will check user data and returns String
+	 * @param Sender provided Sender name
+	 * @param Reciever provided Reciever name
+	 * @return Status provided Status
+	 */
 	@POST
 	@Path("/AddService")
 	public String AddService(@FormParam("Sender") String Sender,
@@ -117,6 +124,11 @@ public class UserServices {
 
 	}
 //---------------------------------------------------------------------------------------------------------
+	/**
+	 * search Rest Service, this service will be called to make search process
+	 * also will check user data and returns new user from datastore
+	 * @param uname provided user name
+	 */
 	@POST
 	@Path("/searchService")
 	public String searchService(@FormParam("uname") String uname) {
@@ -135,6 +147,12 @@ public class UserServices {
 		return object.toString();
 	}
 //---------------------------------------------------------------------------------------------------------------
+	/**
+	 * accept Rest Service, this service will be called to make acceptance process
+	 * @param uname provided Sender name
+	 * @param Reciever provided Reciever name
+	 * @return String
+	 */
 	@Path("/acceptService")
 	public String acceptService(@FormParam("Sender") String uname,@FormParam("Reciever") String Reciever) {
 		JSONObject object = new JSONObject();
@@ -147,5 +165,6 @@ public class UserServices {
 				}
 		return object.toString();
 	}
-
+//----------------------------------------------------------------------------------------------------------
+	
 }

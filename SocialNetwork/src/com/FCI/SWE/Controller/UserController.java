@@ -89,7 +89,8 @@ public class UserController {
 		if ( CurrentUser.user1.getName()  == null && CurrentUser.user1.getPassword()== null  ){
 		return Response.ok(new Viewable("/jsp/login")).build();
 		}else{
-		return Response.ok(new Viewable("/jsp/alredyLogged")).build();
+		//return Response.ok(new Viewable("/jsp/alredyLogged")).build();
+			return Response.ok(new Viewable("/jsp/login")).build();
 		}
 	}
 //--------------------------------------------------------------------------------------
@@ -227,6 +228,44 @@ public class UserController {
 
 			return null;
 	}
+//------------------------------------------------------------------------------------------
+	/**
+	 * Action function to response to search request. This function will act as a
+	 * controller part, it will calls search service to check user data and make sure
+	 * user in datastore
+	 * 
+	 * @param uname
+	 *            provided user name
+	 * @return makesure page view
+	 */
+	@POST
+	@Path("/normalSearch")
+	@Produces("text/html")
+	public Response normalSearch(@FormParam("u_name") String uname) {
+			String urlParameters = "uname=" + uname ;
+			String retJson = Connection.connect(
+					"http://social-media-project-sw2.appspot.com/rest/searchService", urlParameters,
+					"POST", "application/x-www-form-urlencoded;charset=UTF-8");
+			JSONParser parser = new JSONParser();
+			Object obj;
+			try {
+				obj = parser.parse(retJson);
+				JSONObject object = (JSONObject) obj;
+				if (object.get("Status").equals("Failed"))
+					return null;
+				Map<String, String> map = new HashMap<String, String>();
+				User user = User.getUser(object.toJSONString());
+				map.put("name", user.getName());
+				map.put("email", user.getEmail());
+				return Response.ok(new Viewable("/jsp/profile", map)).build();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return null;
+	}
+	
 //------------------------------------------------------------------------------------------
 	/**
 	 * Action function to response to add request. This function will act as a
