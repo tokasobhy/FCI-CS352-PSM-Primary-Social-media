@@ -2,21 +2,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
-<title>Insert title here</title>
+<title>Insert title here
+input submit{
+background
+}
+</title>
+<link href="styleCss.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body background="${pageContext.request.contextPath}/images/1.jpg" class="styleCss" id="body" >
 <form action="/social/logout"  method="post">
   <input type="submit" value="Logout">
-  </form><br>
+</form><br>
   
   <form action="/social/normalSearch"  method="post">
   Enter the name you want to Search:<input type="text" name="u_name" />
-  <input type="submit" value="Search">
+  <input type="submit" value="Search for someone profile">
   </form><br>
   
   <form action="/social/accept"  method="post">
   Enter the friend name to be accepted:<input type="text" name="u_name" />
-  <input type="submit" value="accept">
+  <input type="submit" value="accept a Friend Request">
   </form>
   
 <p> Welcome b2a ya ${it.name} </p>
@@ -27,9 +32,28 @@
 
 <br>
 
+<form action="/social/getAllUsers" method="post">
+  <input type="submit" value="make Conversation group">
+</form>
+
+<form action="/social/showReplyConversation" method="post">
+  <input type="submit" value="reply on aConversation group">
+</form>
+<br>
+
+
 <form action="/social/search" method="post">
 Enter the user name of a person to send a friend requiest: <input type="text" name="uname" />
+  <input type="submit" value="Send a Friend Request">
+</form>
+
+<br> 
+
+<!-- <form action="/social/doSearch" method="post">
+Enter a message:<input type="text" name="uname" />
   <input type="submit" value="Send">
-  </form>
+</form> -->
+<P>link to send a friend message:</P><a href = "/social/message">Send Message to user</a>
+
 </body>
 </html>

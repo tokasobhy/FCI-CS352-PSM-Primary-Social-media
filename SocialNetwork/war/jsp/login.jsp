@@ -3,11 +3,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
 <title>Insert title here</title>
+<style type="text/css">
+body,td,th {
+	font-size: 18px;
+}
+</style>
 </head>
-<body>
+<body background="blue_background_abstract-wide.jpg">
 <form action="/social/home" method="post">
-  Name : <input type="text" name="uname" /> <br>
-  Password : <input type="password" name="password" /> <br>
+  Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uname" /> <br>
+  Password : <input type="password" name="password" />
+  <br> 
+  <br>
   <input type="submit" value="Login">
   
   </form>

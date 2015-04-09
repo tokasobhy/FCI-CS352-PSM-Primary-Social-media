@@ -7,8 +7,8 @@ import org.json.simple.parser.ParseException;
 
 public class User {
 	private long id;
-	private String name;
-	private String email;
+	public String name;
+	public String email;
 	private String password;
 	
 	private static User currentActiveUser;
@@ -27,11 +27,21 @@ public class User {
 		this.name = name;
 		this.email = email;
 		this.password = password;
-
+	}
+	
+	private User(){
 	}
 	
 	private void setId(long id){
 		this.id = id;
+	}
+	
+	private void setEmail(String email  ){
+		this.email = email;
+	}
+	
+	private void setName(String name  ){
+		this.name = name;
 	}
 	
 	public long getId(){
@@ -80,5 +90,28 @@ public class User {
 
 	}
 
-
+	/**
+	 * 
+	 * This static method will form UserEntity class using json format contains
+	 * user data
+	 * 
+	 * @param json
+	 *            String in json format contains user data
+	 * @return Constructed user entity
+	 */
+	public static User parseUserInfo(String json){
+		JSONParser parser = new JSONParser();
+		try{
+			JSONObject object = (JSONObject) parser.parse(json);
+			User user = new User();
+			user.setEmail(object.get("email").toString());
+			user.setName(object.get("name").toString());
+			
+			user.setId(Long.parseLong(object.get("id").toString()));
+			return user;
+		}catch(ParseException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

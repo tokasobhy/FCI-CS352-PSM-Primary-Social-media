@@ -266,5 +266,178 @@ public class UserEntity {
 		
 	return result;
 	}
+//-------------------------------------------------
+	/**
+	 * 
+	 * @param uname
+	 * @return
+	 */
+	public static Vector <UserEntity> searchUser(String uname){
+		DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+		Query gae = new Query("users");
+		PreparedQuery pq = dataStore.prepare(gae);
+		Vector <UserEntity> returnedUsers = new Vector<UserEntity>();
+		for( Entity entity : pq.asIterable() ){
+			String currentName = entity.getProperty("name").toString();
+			if(currentName.contains(uname)){
+				UserEntity user = new UserEntity(entity.getProperty("name").toString()
+												,entity.getProperty("email").toString()
+												,entity.getProperty("password").toString());
+					user.setId(entity.getKey().getId());
+					returnedUsers.add(user);
+			}
+		}
+		return returnedUsers;
+	}
+//-------------------------------------------------
+	/**
+	 * get all users from database
+	 * @return list of users
+	 */
+	public static Vector <UserEntity> getUsers(String chatMaker){
+		DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+		Query gae = new Query("users");
+		PreparedQuery pq = dataStore.prepare(gae);
+		Vector <UserEntity> returnedUsers = new Vector<UserEntity>();
+		for( Entity entity : pq.asIterable() ){
+			String name = entity.getProperty("name").toString();
+			if(!name.equals(chatMaker)){
+				UserEntity user = new UserEntity(entity.getProperty("name").toString()
+												,entity.getProperty("email").toString()
+												,entity.getProperty("password").toString());
+					user.setId(entity.getKey().getId());
+					returnedUsers.add(user);
+			}
+		}
+		return returnedUsers;
+	}
+//-----------------------------------------------------------------------------------------------------
+	/**
+	 * This method will be used to save conversation in datastore
+	 * 
+	 * @return boolean if user is saved correctly or not
+	 */
+	public Boolean makeConv() {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Transaction txn = datastore.beginTransaction();
+		Query gaeQuery = new Query("conv");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+		boolean Mwgood = false; 
+		//System.out.println("Size = " + list.size());
+		
+		for (Entity entity : pq.asIterable()) {
+			if (entity.getProperty("cname").toString().equals(this.name)) {
+				UserEntity user = new UserEntity(entity.getProperty("cname").toString()
+						,entity.getProperty("message").toString(),entity.getProperty("members").toString());
+										
+					user.email += "|" + this.email;
+					
+					try {
+						Entity employee = new Entity("conv",entity.getKey().getId());
+						employee.setProperty("cname", user.name);
+						employee.setProperty("message", user.email);
+						employee.setProperty("members", user.password);
+						
+						datastore.put(employee);
+						txn.commit();
+						
+						}finally{
+							if (txn.isActive()) {
+						        txn.rollback();
+						    }
+						}
+					Mwgood = true;
+			}
+		}
+		
+		if(! Mwgood){
+		try {
+		Entity employee = new Entity("conv", list.size() + 2);
 
+		employee.setProperty("cname", this.name);
+		employee.setProperty("message", this.email);
+		employee.setProperty("members", this.password);
+		
+		datastore.put(employee);
+		txn.commit();
+		
+		String delimiter = ";";
+		String[] temp;
+		temp = this.password.split(delimiter);
+		
+		for(int i =0; i < temp.length ; i++){
+		makeRelation(list.size() + 2,temp[i]);
+		System.out.println(temp[i]);
+		}
+		}finally{
+			if (txn.isActive()) {
+		        txn.rollback();
+		    }
+		}
+	
+		}
+		return true;
+	}			
+//--------------------------------------------------------------------------------------------------
+	/**
+	 * This method will be used to save conversation in datastore
+	 * 
+	 * @return boolean if user is saved correctly or not
+	 */
+	public Boolean makeRelation(int cID,String uname) {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query gaeQuery = new Query("relation");
+		Transaction txn = datastore.beginTransaction();
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		List<Entity> list1 = pq.asList(FetchOptions.Builder.withDefaults());
+		//System.out.println("Size = " + list.size());			
+			try {
+			
+				Entity employee = new Entity("relation", list1.size() + 2);
+		
+				employee.setProperty("cID", cID);
+				employee.setProperty("cname", this.name);
+				employee.setProperty("uname", uname);
+				System.out.println(cID);
+				datastore.put(employee);
+				txn.commit();
+			
+			}finally{
+				if (txn.isActive()) {
+			        txn.rollback();
+			    }
+			}
+		
+		return true;
+	}
+//----------------------------------------------------------------------------------------------------
+	public Boolean savemessage() {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Transaction txn = datastore.beginTransaction();
+		Query gaeQuery = new Query("Message");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+		System.out.println("Size = " + list.size());
+		
+		try {
+		Entity employee = new Entity("Message", list.size() + 2);
+
+		employee.setProperty("Sender", this.name);
+		employee.setProperty("Reciever", this.email);
+		employee.setProperty("Status", this.password);
+		
+		datastore.put(employee);
+		txn.commit();
+		
+		}finally{
+			if (txn.isActive()) {
+		        txn.rollback();
+		    }
+		}
+		return true;
+	}
 }

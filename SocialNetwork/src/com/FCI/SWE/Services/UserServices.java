@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import java.lang.Object;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -27,6 +29,7 @@ import org.json.simple.parser.ParseException;
 
 import com.FCI.SWE.Controller.CurrentUser;
 import com.FCI.SWE.ServicesModels.UserEntity;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
 //import com.google.appengine.repackaged.com.google.common.base.Flag.Boolean;
 
 /**
@@ -166,5 +169,83 @@ public class UserServices {
 		return object.toString();
 	}
 //----------------------------------------------------------------------------------------------------------
-	
+	/**
+	 * search Rest Service, this service will be called to make search process
+	 * also will check user data and returns new user from datastore
+	 * @param uname provided user name
+	 */
+	@POST
+	@Path("/searchService2")
+	public String searchService2(@FormParam("uname") String uname) {
+		Vector<UserEntity> users = UserEntity.searchUser(uname);
+		org.json.simple.JSONArray returnedJson = new org.json.simple.JSONArray();
+		for (UserEntity user : users){
+			JSONObject object = new JSONObject();
+			object.put("id", user.getId());
+			object.put("name", user.getName());
+			object.put("email", user.getEmail());
+			returnedJson.add(object);
+		}
+		return returnedJson.toString();
+	   }
+//---------------------------------------------------------------------------------------------------------
+	/**
+	 * get All Users Rest Service, this service will be called to make load process
+	 * also will check friends data and returns friends from datastore
+	 * @param 
+	 * returns jison object
+	 */
+	@POST
+	@Path("/getAllUsersService")
+	public String getAllFriendsService(@FormParam("chatMaker") String chatMaker) {
+		Vector<UserEntity> users = UserEntity.getUsers(chatMaker);
+		org.json.simple.JSONArray returnedJson = new org.json.simple.JSONArray();
+		for (UserEntity user : users){
+			JSONObject object = new JSONObject();
+			object.put("id", user.getId());
+			object.put("name", user.getName());
+			object.put("email", user.getEmail());
+			returnedJson.add(object);
+		}
+		return returnedJson.toString();
+	}
+//--------------------------------------------------------------------------------------------------
+	/**
+	 * makeConversation Rest Service, this service will be called to make makeConversation process
+	 * @param uname provided user name
+	 * @param pass provided user password
+	 * @return user in json format
+	 */
+	@POST
+	@Path("/makeConversationService")
+	public String makeConversationService(@FormParam("cname") String cname,
+			@FormParam("message") String message,@FormParam("members") String members) {
+		JSONObject object = new JSONObject();
+		UserEntity user2 = new UserEntity(cname, message, members);
+		
+		//System.out.println("M = "+members);
+		
+		user2.makeConv();
+		object.put("Status", "OK");
+		return object.toString();
+	}
+//-----------------------------------------------------------------------------------------------------
+	/**
+	 * Add Rest Service, this service will be called to make add request process
+	 * also will check user data and returns String
+	 * @param Sender provided Sender name
+	 * @param Reciever provided Reciever name
+	 * @return Status provided Status
+	 */
+	@POST
+	@Path("/Messageservice")
+	public String Messageservice(@FormParam("Sender") String Sender,
+			@FormParam("Reciever") String Reciever, @FormParam("message") String message) {
+		System.out.println(message);
+		UserEntity user2 = new UserEntity(Sender, Reciever, message);
+		user2.savemessage();
+		JSONObject object = new JSONObject();
+		object.put("Status", "OK");
+		return object.toString();
+	}
 }

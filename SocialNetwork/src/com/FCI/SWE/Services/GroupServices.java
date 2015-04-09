@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONObject;
 
 import com.FCI.SWE.ServicesModels.GroupEntity;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
 
 @Path("/")
 @Produces(MediaType.TEXT_PLAIN)
