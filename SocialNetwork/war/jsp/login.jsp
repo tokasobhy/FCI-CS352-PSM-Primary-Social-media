@@ -3,13 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
 <title>Insert title here</title>
-<style type="text/css">
-body,td,th {
-	font-size: 18px;
-}
-</style>
+<link href="/css/login.css" rel="stylesheet" type="text/css">
 </head>
-<body background="blue_background_abstract-wide.jpg">
+<body>
 <form action="/social/home" method="post">
   Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uname" /> <br>
   Password : <input type="password" name="password" />

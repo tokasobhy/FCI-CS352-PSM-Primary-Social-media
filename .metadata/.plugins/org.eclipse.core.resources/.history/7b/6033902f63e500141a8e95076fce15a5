@@ -1,0 +1,12 @@
+package com.FCI.SWE.Post;
+
+public abstract class Post {
+	public String postOwner;
+	public String postContent;
+	public int numOfLikes;
+	public String timeLineOwner;
+	public String privacy;
+	public int membersShares;
+	
+
+}

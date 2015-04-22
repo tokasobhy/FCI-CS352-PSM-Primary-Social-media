@@ -1,0 +1,6 @@
+package com.FCI.SWE.Controller;
+
+public interface Post {
+
+	public void writePost();
+}

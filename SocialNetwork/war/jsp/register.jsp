@@ -4,13 +4,9 @@
 <head>
   <title>Welcome!</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<style type="text/css">
-body,td,th {
-	font-size: 18px;
-}
-</style>
+<link href="/css/login.css" rel="stylesheet" type="text/css">
 </head>
-<body background="blue_background_abstract-wide.jpg">
+<body>
   <form action="/social/response" method="post">
   Name : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uname" /> <br>
   Email : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="email" /> <br>

@@ -1,0 +1,15 @@
+package com.FCI.SWE.Post;
+
+public class PagePost extends Post {
+	public String pageOwner;
+	public int numOfSeen;
+	
+	@Override
+	public void write() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+
+}

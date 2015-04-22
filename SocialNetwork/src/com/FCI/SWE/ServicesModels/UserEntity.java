@@ -1,8 +1,17 @@
 package com.FCI.SWE.ServicesModels;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+import java.util.Collections;
+import java.util.*;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,6 +27,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Transaction;
+
 
 /**
  * <h1>User Entity class</h1>
@@ -414,6 +424,10 @@ public class UserEntity {
 		return true;
 	}
 //----------------------------------------------------------------------------------------------------
+	/**
+	 * this method save message
+	 * @return boolean to shows if the object are saved ro not 
+	 */
 	public Boolean savemessage() {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -440,4 +454,102 @@ public class UserEntity {
 		}
 		return true;
 	}
+
+	//-------------------------------------------------------GetHashTag
+		
+		static int counter=0;
+		public static int GetHashTag(String gethashtag) {
+			System.out.println("user entity");
+			DatastoreService datastore = DatastoreServiceFactory
+					.getDatastoreService();
+
+			Query gaeQuery = new Query("post");
+			PreparedQuery pq = datastore.prepare(gaeQuery);
+			for (Entity entity : pq.asIterable()) {
+				if (entity.getProperty("hashTag").toString().equals(gethashtag)) {			
+					counter++;
+					
+				}
+			}
+
+			return counter;
+		}
+		
+
+		
+		//-------------------------------------------------------GetTimeLine
+		   public static ArrayList<String>arr=new ArrayList<>();
+				public static  ArrayList<String> GetTimeLine(String gittimeline) {
+					DatastoreService datastore = DatastoreServiceFactory
+							.getDatastoreService();
+		       //System.out.println("GetMostTenHashTag");
+					Query gaeQuery = new Query("post");
+					PreparedQuery pq = datastore.prepare(gaeQuery);
+					for (Entity entity : pq.asIterable()) {
+						if (entity.getProperty("hashTag").toString().equals(gittimeline)) {			
+							
+							arr.add(entity.getProperty("postContent").toString());
+						}
+					}
+
+					return arr;
+				}
+				
+		//-------------------------------------------------------------GetMostTenHashTag	
+				
+		  public static  Map<String, Integer> map = new HashMap<String, Integer>();
+					public static  Map<String , Integer> GetMostTenHashTag() {
+						DatastoreService datastore = DatastoreServiceFactory
+								.getDatastoreService();
+						Query gaeQuery = new Query("post");
+						PreparedQuery pq = datastore.prepare(gaeQuery);
+						for (Entity entity : pq.asIterable()) {
+							
+			    int count =0;
+							
+				if(map.containsKey(entity.getProperty("hashTag").toString()))
+				           {
+					count = map.get(entity.getProperty("hashTag").toString());
+							count++;	
+					map.put(entity.getProperty("hashTag").toString(), count);
+						  }
+				else{
+					map.put(entity.getProperty("hashTag").toString(), 1);
+					
+				     }         
+				 }
+						
+						Map<String, Integer> fMap= sortByComparator(map);   
+										
+		                return fMap;
+				}
+
+
+		//----------------------------------------------------------------------------------------sortmap
+				
+					private static Map<String, Integer> sortByComparator(Map<String, Integer> unsortMap) {
+						 
+						// Convert Map to List
+						List<Map.Entry<String, Integer>> list = 
+							new LinkedList<Map.Entry<String, Integer>>(unsortMap.entrySet());
+				 
+						
+						Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+							public int compare(Map.Entry<String, Integer> o1,
+				                                           Map.Entry<String, Integer> o2) {
+								return (o1.getValue()).compareTo(o2.getValue());
+							}
+						});
+				 
+						// Convert sorted map back to a Map
+						Map<String, Integer> sortedMap = new LinkedHashMap<String, Integer>();
+						for (Iterator<Map.Entry<String, Integer>> it = list.iterator(); it.hasNext();) {
+							Map.Entry<String, Integer> entry = it.next();
+							sortedMap.put(entry.getKey(), entry.getValue());
+						}
+						return sortedMap;
+					}
+					
+					
+
 }

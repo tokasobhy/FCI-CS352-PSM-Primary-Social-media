@@ -1,0 +1,97 @@
+package com.FCI.SWE.Post;
+
+public class PublicPost extends PrivacyPost {
+
+	public PublicPost(String postOwner, String postContent, int numOfLikes,
+			String privacy, int membersShares, Post myPost) {
+		super(postOwner, postContent, numOfLikes, privacy, membersShares, myPost);
+	}
+
+	@Override
+	public void writepagePost() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setAllowedMwmbers() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void privacyPost(Post p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getPostOwner() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPostOwner(String postOwner) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getPostContent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPostContent(String postContent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getNumOfLikes() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setNumOfLikes(int numOfLikes) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getPrivacy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPrivacy(String privacy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getMembersShares() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setMembersShares(int membersShares) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void writePost() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	
+
+}

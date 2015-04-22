@@ -3,14 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
 <title>Insert title here</title>
-<style type="text/css">
-body {
-	background-repeat: repeat;
-}
-body,td,th {
-	font-size: 36px;
-}
-</style>
+<link href="/css/entryPoint.css" rel="stylesheet" type="text/css">
 </head>
 <body background="digital_abstract_background-wide.jpg">
 <a href="/social/signup/">Sign up</a> <br>

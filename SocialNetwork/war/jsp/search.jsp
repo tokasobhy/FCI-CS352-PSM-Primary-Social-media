@@ -2,6 +2,7 @@
    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link href="/css/search.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<form action="/social/doSearch" method="post">
