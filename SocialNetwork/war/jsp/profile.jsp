@@ -11,7 +11,15 @@
 <title>Insert title here</title>
 <link href="/css/profile.css" rel="stylesheet" type="text/css">
 </head>
-<body background="dolphin_1_background.jpg">
+<body >
+
+<form action="/social/getSomeonePosts" style="text-align:right" method="post">
+<input type="hidden" value = "${it.name}" name="timeLineOwner"  /> <br>
+<p>
+ ${it.name}  posts: <input type="submit"  value="posts">
+</p>
+</form>
+
 <p><h1>dh 2smh ${it.name}</h1></p><br>
 <p><h1>el email bta3h ${it.email}</h1></p>
 

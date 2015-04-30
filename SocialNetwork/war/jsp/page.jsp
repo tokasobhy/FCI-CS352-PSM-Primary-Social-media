@@ -16,10 +16,19 @@
 <h1>this is ${it.pageName} page</h1>
 
 <form action="/social/pageLike"  method="post" >
+<span style="float:left;">
 	<input type="hidden" name="pageName" value="${it.pageName}">
   <input type="submit" value="Like This Page" >
+</span>
 </form>
 
+<form action="/social/getPagePosts" style="text-align:right" method="post">
+<span style="float:right;">
+<input type="hidden" value = "${it.pageName}" name="timeLineOwner"  /> <br>
+ ${it.pageName}  posts: <input type="submit"  value="posts">
+</span>
+</form>
+<br>
 <form action="/social/savePost2"  method="post">
 <p>
 post:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 

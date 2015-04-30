@@ -26,8 +26,9 @@ background
   </span>
 </form>
 
-<form action="/social/logout" style="text-align:right" method="post">
+<form action="/social/getSomeonePosts" style="text-align:right" method="post">
 <span style="float:right;"> 
+<input type="hidden" value = "${it.name}" name="timeLineOwner"  /> <br>
   <input type="submit"  value="my posts">
   </span>
 </form>

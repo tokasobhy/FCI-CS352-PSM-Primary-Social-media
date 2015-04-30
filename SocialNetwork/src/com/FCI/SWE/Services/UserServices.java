@@ -396,6 +396,29 @@ public class UserServices {
 	}
 //---------------------------------------------------------------------------------------------------------
 	/**
+	 * Add Rest Service, this service will be called to make createPage process
+	 * also will check posts data and returns String
+	 * @param pageName
+	 *            provided the page name
+	 * @return Status provided Status
+	 */
+	@POST
+	@Path("/likePostService")
+	public String likePostService(@FormParam("id") String id,@FormParam("liker") String liker) {
+		System.out.println("service = "+id);
+		System.out.println("service liker = "+ liker);
+		boolean p = UserPost.likepost(liker,Long.parseLong(id));
+		System.out.println("3daaaaaaaaa");
+		JSONObject object = new JSONObject();
+		if(p){
+				object.put("Status", "OK");
+		}else{
+				object.put("Status", "koba");
+		}
+		return object.toString();
+	}
+//---------------------------------------------------------------------------------------------------------
+	/**
 	 * Add Rest Service, this service will be called to make retrieve all  posts
 	 * @return Status provided Status
 	 */
@@ -431,8 +454,69 @@ public class UserServices {
 		}
 		return returnedJson.toString();
 	}
-	//---------------------------------------------------GetHashTag
-	
+//----------------------------------------------------Get someone posts
+	/**
+	 * Add Rest Service, this service will be called to make retrieve all someone  posts
+	 * @return Status provided Status
+	 */
+	@POST
+	@Path("/getSomeonePostsService")
+	public String getSomeonePostsService(@FormParam("timeLineOwner") String timeLineOwner){
+		//System.out.println("timeLineOwner from service="+timeLineOwner);
+		Vector<UserPost> posts = UserPost.getSomeonePosts(timeLineOwner);
+		org.json.simple.JSONArray returnedJson = new org.json.simple.JSONArray();
+		for (UserPost post : posts){
+			JSONObject object = new JSONObject();
+			object.put("postOwner", post.getPostOwner());
+			object.put("postContent", post.getPostContent());
+			object.put("numOfLikes",  post.getNumOfLikes());
+			object.put("membersShares", post.getMembersShares());
+			object.put("hashTag", post.getHashTag());
+			object.put("timeLineOwner", post.getTimeLineOwner());
+			object.put("feeling", post.getFeeling());
+			object.put("postType", post.getpostType());
+			object.put("pageOwner", post.pageOwner);
+			object.put("numOfSeen", post.numOfSeen);
+			object.put("id", post.ID);
+			returnedJson.add(object);
+		}
+		return returnedJson.toString();
+	}
+//-----------------------------------------------------
+	/**
+	 * Add Rest Service, this service will be called to make retrieve all someone  posts
+	 * @param timeline owner providing the page name
+	 * @return Status provided Status
+	 */
+	@POST
+	@Path("/getPagePostsService")
+	public String getPagePostsService(@FormParam("timeLineOwner") String timeLineOwner){
+		//System.out.println("timeLineOwner from service="+timeLineOwner);
+		Vector<UserPost> posts = UserPost.getPagePostsService(timeLineOwner);
+		org.json.simple.JSONArray returnedJson = new org.json.simple.JSONArray();
+		for (UserPost post : posts){
+			JSONObject object = new JSONObject();
+			object.put("postOwner", post.getPostOwner());
+			object.put("postContent", post.getPostContent());
+			object.put("numOfLikes",  post.getNumOfLikes());
+			object.put("membersShares", post.getMembersShares());
+			object.put("hashTag", post.getHashTag());
+			object.put("timeLineOwner", post.getTimeLineOwner());
+			object.put("feeling", post.getFeeling());
+			object.put("postType", post.getpostType());
+			object.put("pageOwner", post.pageOwner);
+			object.put("numOfSeen", post.numOfSeen);
+			object.put("id", post.ID);
+			returnedJson.add(object);
+		}
+		return returnedJson.toString();
+	}
+//---------------------------------------------------GetHashTag
+/**
+ * 	
+ * @param gethashtag
+ * @return
+ */
 	
 		@POST
 		@Path("/GetHashTagService")
@@ -454,8 +538,12 @@ public class UserServices {
 		}
 		
 
-		//---------------------------------------------------GetTimeLine
-			
+//---------------------------------------------------GetTimeLine
+/**
+ * 			
+ * @param gettimeline
+ * @return
+ */
 			
 				@POST
 				@Path("/GitTimeLineService")
@@ -476,8 +564,11 @@ public class UserServices {
 
 				}
 			
-		//-----------------------------------------------------------------------GetMostTenHashTagService
-				
+//-----------------------------------------------------------------------GetMostTenHashTagService
+/**
+ * 				
+ * @return
+ */
 				@POST
 				@Path("/GetMostTenHashTagService")
 				public String GetMostTenHashTagService() {

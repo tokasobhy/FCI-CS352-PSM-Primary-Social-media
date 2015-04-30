@@ -509,7 +509,7 @@ public class UserController {
 					@FormParam("membersToShow") String membersToShow,@FormParam("feeling") String feeling,@FormParam("privacy") String privacy,@FormParam("timeLineOwner") String timeLineOwner) {
 		if(postContent.equals("")){postContent = "noData";}
 		if(hashTag.equals("")){hashTag = "noData";}
-		if (feeling.equals("")){feeling = "noData";}
+		//if (feeling.equals("")){feeling = "noData";}
 		//System.out.println(uname);
 		String urlParameters = "postOwner=" +CurrentUser.user1.getName()+"&postContent="+postContent+"&hashTag="+hashTag+"&membersToShow="+membersToShow+"&feeling="+feeling+"&privacy="+privacy+"&timeLineOwner="+ timeLineOwner ;
 
@@ -683,6 +683,39 @@ public class UserController {
 	}
 //----------------------------------------------------------------------------------------------------
 	/**
+	 * this is social Service, this service will be called to increases likes of the page  process
+	 * also will check pages data 
+	 * @param pageName
+	 *            provided the page name
+	 * @return Status provided Status
+	 */
+	@POST
+	@Path("/likePost")
+	@Produces("text/html")
+	public String likePost(@FormParam("id") String id){
+		System.out.println("controller = "+id);
+		String urlParameters ="id="+id+"&liker="+CurrentUser.user1.getName();
+		String retJson = Connection.connect("http://localhost:8888/rest/likePostService", urlParameters , "POST",
+				"application/x-www-form-urlencoded;charset=UTF-8");
+		JSONParser parser = new JSONParser();
+		Object obj;
+		try {
+			obj = parser.parse(retJson);
+			JSONObject object = (JSONObject) obj;
+			if ((object.get("Status").toString()).equals("OK")){
+			  // System.out.println("2");
+			   return null;
+			}else if ((object.get("Status").toString()).equals("koba")){
+				return "you liked this post before";
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;	
+	}
+//----------------------------------------------------------------------------------------------------
+	/**
 	 * 
 	 * @return
 	 */
@@ -690,10 +723,10 @@ public class UserController {
 	@Path("/getAllPosts")
 	public Response getAllPosts(){
 		String serviceUrl = "http://localhost:8888/rest/getAllPostsService";
-		System.out.println("1111111");
+		//System.out.println("1111111");
 		String retJson = Connection.connect(serviceUrl,"", "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
-		System.out.println("1222");
+		//System.out.println("1222");
 		JSONParser parser = new JSONParser();
 		Map<String, Vector<UserPost>> passedPosts = new HashMap<String, Vector<UserPost>>();
 		try{
@@ -711,8 +744,78 @@ public class UserController {
 			}
 		return null;
 	}
-	//---------------------------------------------GetHashTag
-	
+//-------------------------------------------------------------------------Get Someone posts
+	/**
+	 * this calling service to get all user posts
+	 * @param timeline owner 
+	 * @return response posts page
+	 */
+	@POST
+	@Path("/getSomeonePosts")
+	public Response getSomeonePosts(@FormParam("timeLineOwner") String timeLineOwner){
+		String serviceUrl = "http://localhost:8888/rest/getSomeonePostsService";
+		String urlParameters ="timeLineOwner="+timeLineOwner;
+		//System.out.println("timeLineOwner from controller="+timeLineOwner);
+		String retJson = Connection.connect(serviceUrl,urlParameters, "POST",
+				"application/x-www-form-urlencoded;charset=UTF-8");
+		
+		JSONParser parser = new JSONParser();
+		Map<String, Vector<UserPost>> passedPosts = new HashMap<String, Vector<UserPost>>();
+		try{
+			JSONArray array = (JSONArray) parser.parse(retJson);
+			Vector<UserPost> posts = new Vector <UserPost>();
+			for (int i = 0; i < array.size(); i++){
+				JSONObject object;
+				object = (JSONObject) array.get(i);
+				posts.add((UserPost) UserPost.parsePostInfo(object.toJSONString()));
+				}
+			//System.out.println(posts.size());
+			passedPosts.put("postsList", posts);
+			return Response.ok(new Viewable("/jsp/posts", passedPosts)).build();
+		}catch(ParseException e){
+				e.printStackTrace();
+			}
+		return null;
+	}
+//----------------------------------------------
+	/**
+	 * this calling service to get all page posts
+	 * @param timeline owner 
+	 * @return response posts page
+	 */
+	@POST
+	@Path("/getPagePosts")
+	public Response getPagePosts(@FormParam("timeLineOwner") String timeLineOwner){
+		String serviceUrl = "http://localhost:8888/rest/getPagePostsService";
+		String urlParameters ="timeLineOwner="+timeLineOwner;
+		//System.out.println("timeLineOwner from controller="+timeLineOwner);
+		String retJson = Connection.connect(serviceUrl,urlParameters, "POST",
+				"application/x-www-form-urlencoded;charset=UTF-8");
+		
+		JSONParser parser = new JSONParser();
+		Map<String, Vector<UserPost>> passedPosts = new HashMap<String, Vector<UserPost>>();
+		try{
+			JSONArray array = (JSONArray) parser.parse(retJson);
+			Vector<UserPost> posts = new Vector <UserPost>();
+			for (int i = 0; i < array.size(); i++){
+				JSONObject object;
+				object = (JSONObject) array.get(i);
+				posts.add((UserPost) UserPost.parsePostInfo(object.toJSONString()));
+				}
+			//System.out.println(posts.size());
+			passedPosts.put("postsList", posts);
+			return Response.ok(new Viewable("/jsp/posts", passedPosts)).build();
+		}catch(ParseException e){
+				e.printStackTrace();
+			}
+		return null;
+	}
+//---------------------------------------------GetHashTag
+	/**
+	 * 
+	 * @param gethashtag
+	 * @return
+	 */
 
 		@POST
 		@Path("/GetHashTag")
@@ -749,7 +852,11 @@ public class UserController {
 		
 		
 		//---------------------------------------------GetTimeLine
-			
+		/**
+		 * 
+		 * @param gettimeline
+		 * @return
+		 */
 
 			@POST
 			@Path("/GetTimeLine")   
@@ -799,7 +906,10 @@ public class UserController {
 			}
 			
 	//----------------------------------------------------------GetMostTenHashTag
-			
+		/**
+		 * 	
+		 * @return
+		 */
 
 			@POST
 			@Path("/GetMostTenHashTag")   
