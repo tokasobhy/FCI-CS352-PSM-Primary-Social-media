@@ -1,0 +1,38 @@
+package com.FCI.SWE.Post;
+
+public class PagePost extends Post {
+	public String pageOwner;
+	public int numOfSeen;
+	
+	
+	public String getPageOwner() {
+		return pageOwner;
+	}
+
+
+	public void setPageOwner(String pageOwner) {
+		this.pageOwner = pageOwner;
+	}
+
+
+	public int getNumOfSeen() {
+		return numOfSeen;
+	}
+
+
+	public void setNumOfSeen(int numOfSeen) {
+		this.numOfSeen = numOfSeen;
+	}
+	
+	
+
+
+	@Override
+	public void write() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+
+}

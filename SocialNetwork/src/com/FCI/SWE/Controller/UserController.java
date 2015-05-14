@@ -736,7 +736,6 @@ public class UserController {
 				JSONObject object;
 				object = (JSONObject) array.get(i);
 				posts.add((UserPost) UserPost.parsePostInfo(object.toJSONString()));
-				System.out.println("id" + object.get("id"));
 				}
 			passedPosts.put("postsList", posts);
 			return Response.ok(new Viewable("/jsp/posts", passedPosts)).build();

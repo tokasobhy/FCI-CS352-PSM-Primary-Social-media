@@ -1,0 +1,64 @@
+package com.FCI.SWE.Post;
+
+public abstract class Post {
+	public String postOwner;
+	public String postContent;
+	public int numOfLikes;
+	public String privacy;
+	public int membersShares;
+	
+	
+	public String getPostOwner() {
+		return postOwner;
+	}
+
+
+	public void setPostOwner(String postOwner) {
+		this.postOwner = postOwner;
+	}
+
+
+	public String getPostContent() {
+		return postContent;
+	}
+
+
+	public void setPostContent(String postContent) {
+		this.postContent = postContent;
+	}
+
+
+	public int getNumOfLikes() {
+		return numOfLikes;
+	}
+
+
+	public void setNumOfLikes(int numOfLikes) {
+		this.numOfLikes = numOfLikes;
+	}
+
+
+	public String getPrivacy() {
+		return privacy;
+	}
+
+
+	public void setPrivacy(String privacy) {
+		this.privacy = privacy;
+	}
+
+
+	public int getMembersShares() {
+		return membersShares;
+	}
+
+
+	public void setMembersShares(int membersShares) {
+		this.membersShares = membersShares;
+	}
+
+
+	public abstract void write();
+	
+
+}
