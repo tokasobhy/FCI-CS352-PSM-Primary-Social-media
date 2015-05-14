@@ -1,0 +1,288 @@
+package com.FCI.SWE.Page;
+
+//import java.util.Date;
+import java.util.List;
+//import java.util.Vector;
+
+/*import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;*/
+
+
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+//import com.FCI.SWE.Models.User;
+//import com.FCI.SWE.ServicesModels.UserEntity;
+//import com.FCI.SWE.Controller.CurrentUser;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+//import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.FetchOptions;
+//import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Transaction;
+
+
+public class Page {
+		public String pageName;
+		public String pageOwner;
+		public String category;
+		public String type;
+		public int numOfLikes;
+		public long ID;
+		
+		
+		public Page(String pageName,String pageOwner, String category, String type,
+				int numOfLikes) {
+			super();
+			this.pageName = pageName;
+			this.pageOwner = pageOwner;
+			this.category = category;
+			this.type = type;
+			this.numOfLikes = numOfLikes;
+		}
+
+
+		public String getPageOwner() {
+			return pageOwner;
+		}
+
+
+		public void setPageOwner(String pageOwner) {
+			this.pageOwner = pageOwner;
+		}
+
+
+		public String getPageName() {
+			return pageName;
+		}
+
+
+		public void setPageName(String pageName) {
+			this.pageName = pageName;
+		}
+
+
+		public String getCategory() {
+			return category;
+		}
+
+
+		public void setCategory(String category) {
+			this.category = category;
+		}
+
+
+		public String getType() {
+			return type;
+		}
+
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+
+		public int getNumOfLikes() {
+			return numOfLikes;
+		}
+
+
+		public void setNumOfLikes(int numOfLikes) {
+			this.numOfLikes = numOfLikes;
+		}
+		
+		public long getID() {
+			return ID;
+		}
+
+
+		public void setID(long l) {
+			ID = l;
+		}
+		
+		/**
+		 * Add Rest Service, this service will be called to make createPage process
+		 * also will check posts data and returns String
+		 */
+		
+		public boolean createPage(){
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Transaction txn = datastore.beginTransaction();
+			Query gaeQuery = new Query("p age");
+			PreparedQuery pq = datastore.prepare(gaeQuery);
+			List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+			
+			try{
+			Entity employee = new Entity("page", list.size() + 1);
+			
+			employee.setProperty("pageName",this.pageName );
+			employee.setProperty("pageOwner",this.pageOwner );
+			employee.setProperty("category", this.category);
+			employee.setProperty("type", this.type);
+			employee.setProperty("numberOfLikes", this.numOfLikes);
+			datastore.put(employee);
+			txn.commit();
+			}
+			finally{
+			if (txn.isActive()) {
+		        txn.rollback();
+		      
+		    }
+		}
+			return true;
+		}
+		
+//----------------------------------------------------------------------------------------
+		/**
+		 * this method converting from jison Type to Page type
+		 * @param json 
+		 * 			provided by jison which i need to convert
+		 * @return Page 
+		 * 			provided the page after converted
+		 */
+		public static Page getPage(String json) {
+
+			JSONParser parser = new JSONParser();
+			try {
+				JSONObject object = (JSONObject) parser.parse(json);
+				Page page = new Page(object.get("pageName").toString(), object.get(
+						"pageOwner").toString(), object.get("category").toString(),object.get("type").toString(),(Integer.parseInt(object.get("numOfLikes").toString())));
+				return page;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+
+		}
+//-------------------------------------------------------------------------------------------------
+		/**
+		 * this method retrieve the page by page name
+		 * @param pageName
+		 * 			provided page which i want to search about it
+		 * @return this page
+		 */
+	public static Page getSpecificPage(String pageName){ 
+		
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+
+		Query gaeQuery = new Query("page");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		for (Entity entity : pq.asIterable()) {
+			if (entity.getProperty("pageName").toString().equals(pageName)) {
+				Page returnedPage = new Page(entity.getProperty(
+						"pageName").toString(), entity.getProperty("pageOwner")
+						.toString(), entity.getProperty("category").toString(),entity.getProperty("type").toString(),Integer.parseInt(entity.getProperty("numberOfLikes").toString()));
+				
+				return returnedPage;
+			}
+		}
+
+		return null;
+	}
+//------------------------------------------------------------------------------------------------
+	/**
+	 * 
+	 * @param likerName
+	 * @param pageName
+	 * @return
+	 */
+	public static boolean subLikePage(String likerName, String pageName){
+		boolean m4mwgood = true;
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query gaeQuery = new Query("pageLikers");
+		
+		//Transaction txn = datastore.beginTransaction();
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		for (Entity entity : pq.asIterable()) {
+			if (entity.getProperty("likerName").toString().equals(likerName)&&
+				entity.getProperty("pageName").toString().equals(pageName)){
+				m4mwgood = false;
+			}
+		}
+		if(m4mwgood){
+			DatastoreService datastore2 = DatastoreServiceFactory
+					.getDatastoreService();
+			Query gaeQuery2 = new Query("pageLikers");
+			
+			Transaction txn2 = datastore2.beginTransaction();
+			PreparedQuery pq2 = datastore2.prepare(gaeQuery2);
+			List<Entity> list = pq2.asList(FetchOptions.Builder.withDefaults());
+			try {
+				Entity employee = new Entity("pageLikers", list.size() + 2);
+
+				employee.setProperty("likerName", likerName);
+				employee.setProperty("pageName", pageName);
+				datastore2.put(employee);
+				txn2.commit();
+				}finally{
+					if (txn2.isActive()) {
+				        txn2.rollback();
+				    }
+				}
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+//------------------------------------------------------------------------------------------------
+	/**
+	 * this method retrieve the page by page name and increase number of likes if this person 
+	 * didn't like this page before
+	 * @param pageName
+	 * 			provided page which i want to search about it
+	 * @return this page
+	 */
+	public static boolean likePage(String likerName, String pageName){
+		if(subLikePage(likerName, pageName)){
+				DatastoreService datastore = DatastoreServiceFactory
+						.getDatastoreService();
+				Query gaeQuery = new Query("page");
+				Transaction txn = datastore.beginTransaction();
+				PreparedQuery pq = datastore.prepare(gaeQuery);
+				for (Entity entity : pq.asIterable()) {
+					if (entity.getProperty("pageName").toString().equals(pageName)) {
+						/*Page returnedPage = new Page(entity.getProperty(
+								"pageName").toString(), entity.getProperty("pageOwner")
+								.toString(), entity.getProperty("category").toString(),
+								entity.getProperty("type").toString(),
+								(Integer.parseInt(entity.getProperty("numberOfLikes").toString()))+1);
+						returnedPage.setID(entity.getKey().getId());*/
+						try {
+							Entity employee = new Entity("page",entity.getKey().getId()) ;
+		
+							employee.setProperty("pageName",entity.getProperty("pageName").toString());
+							employee.setProperty("pageOwner", entity.getProperty("pageOwner").toString());
+							employee.setProperty("category", entity.getProperty("category").toString());
+							employee.setProperty("type", entity.getProperty("type").toString());
+							employee.setProperty("numberOfLikes", (Integer.parseInt(entity.getProperty("numberOfLikes").toString()))+1);
+							datastore.put(employee);
+							txn.commit();
+							
+							}finally{
+								if (txn.isActive()) {
+							        txn.rollback();
+													}
+									}
+																						}
+														}
+		return true;
+		}else{
+			return false;
+		}
+	}
+//-----------------------------------------------------------------------------------------------
+	
+		
+		
+		
+}

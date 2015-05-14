@@ -1,5 +1,0 @@
-package com.FCI.SWE.Post;
-
-public class PublicPost extends PrivacyPost {
-
-}

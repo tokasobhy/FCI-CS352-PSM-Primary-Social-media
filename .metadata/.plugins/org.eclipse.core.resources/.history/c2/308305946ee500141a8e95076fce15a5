@@ -1,9 +1,0 @@
-package com.FCI.SWE.Post;
-
-public abstract class PrivacyPost extends Post {
-	Post myPost;
-	public abstract void writePost();
-	public abstract void setAllowedMwmbers();
-	public abstract void privacyPost(Post p);
-
-}
