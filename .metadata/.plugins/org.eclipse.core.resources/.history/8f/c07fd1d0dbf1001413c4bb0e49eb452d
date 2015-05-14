@@ -1,0 +1,63 @@
+package com.FCI.SWE.Post;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+public abstract class Post {
+	public String postOwner;
+	public String postContent;
+	public int numOfLikes;
+	public String postType;
+	public int membersShares;
+	public String hashTag;
+	public String pageOwner = "";
+	public int numOfSeen;
+	public String timeLineOwner = "";
+	public String feeling;
+	public int ID;
+	public int k ;
+	
+	public Post(){
+		k = 5 ;
+		}
+	
+	public Post(String postOwner, String postContent, int numOfLikes,
+			String postType, int membersShares,String hashTag) {
+		super();
+		this.postOwner = postOwner;
+		this.postContent = postContent;
+		this.numOfLikes = numOfLikes;
+		this.postType = postType;
+		this.membersShares = membersShares;
+		this.hashTag = hashTag;
+	}
+	
+	public Post(String postOwner, String postContent, int numOfLikes,
+				int membersShares,String hashTag) {
+		super();
+		this.postOwner = postOwner;
+		this.postContent = postContent;
+		this.numOfLikes = numOfLikes;
+		this.membersShares = membersShares;
+		this.hashTag = hashTag;
+	}
+	
+	public abstract String getPostOwner();
+	public abstract void setPostOwner(String postOwner);
+	public abstract String getPostContent();
+	public abstract void setPostContent(String postContent);
+	public abstract int getNumOfLikes();
+	public abstract void setNumOfLikes(int numOfLikes);
+	public abstract String getpostType();
+	public abstract void setpostType(String postType);
+	public abstract int getMembersShares();
+	public abstract void setMembersShares(int membersShares) ;
+	public abstract void setHashTag(String  hashTag);
+	public abstract String getHashTag();
+	
+	public abstract boolean writePost();
+	
+	
+	
+
+}
